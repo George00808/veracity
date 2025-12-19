@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veracity</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app" class="hidden">
+    <div class="backdrop"></div>
+
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">
+            <div class="brand-dot"></div>
+            <div class="brand-glow"></div>
+          </div>
+          <div class="brand-text">Veracity</div>
+        </div>
+
+        <nav class="nav" aria-label="Primary">
+          <button class="nav-item active" data-tab="dashboard">
+            <span class="nav-ico">◆</span>
+            <span class="nav-text">Dashboard</span>
+          </button>
+
+          <button class="nav-item" data-tab="players">
+            <span class="nav-ico">◈</span>
+            <span class="nav-text">Players</span>
+          </button>
+
+          <button class="nav-item" data-tab="empty">
+            <span class="nav-ico">≡</span>
+            <span class="nav-text">Overview</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="hint">
+            <span class="kbd">BACKSPACE</span>
+            <span class="hint-text">Close panel</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="topbar-left">
+            <div class="page-title" id="pageTitle">Dashboard</div>
+            <div class="page-sub"></div>
+          </div>
+
+          <div class="topbar-right">
+            <div class="pill">
+              <span class="pill-dot"></span>
+              <span class="pill-text">Connected</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="content">
+          <div class="grid">
+            <div class="card tab" data-tabpanel="dashboard">
+              <div class="card-body">
+                <div class="empty"></div>
+              </div>
+            </div>
+
+            <div class="card tab hidden" data-tabpanel="players">
+              <div class="card-body">
+                <div class="empty"></div>
+              </div>
+            </div>
+
+            <div class="card tab hidden" data-tabpanel="empty">
+              <div class="card-body">
+                <div class="empty"></div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
