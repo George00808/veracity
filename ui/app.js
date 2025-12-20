@@ -52,7 +52,7 @@ function setTab(tabName) {
 
   pageTitle.textContent = titleMap[tabName] ?? "Veracity";
 
-  if (tabName === "players") {
+  if (!app.classList.contains("hidden") && tabName === "players") {
     requestPlayers();
   }
 }
@@ -101,17 +101,28 @@ function renderDetail() {
   const coords = target.coords || {};
   const distance = typeof target.distance === "number" ? `${Math.floor(target.distance)} m away` : "Distance unavailable";
   const identifiers = (target.identifiers || []).map(id => `<li>${id}</li>`).join("") || "<li>No identifiers</li>";
+  const state = target.state || "unknown";
+  const health = target.health !== undefined ? target.health : "--";
+  const armour = target.armour !== undefined ? target.armour : "--";
 
   playerDetailEl.innerHTML = `
     <div class="detail-head">
       <div>
         <div class="detail-name">${target.name || "Unknown"}</div>
-        <div class="detail-sub">ID ${target.id} ? ${distance}</div>
+        <div class="detail-sub">ID ${target.id} | ${distance}</div>
       </div>
     </div>
     <div class="detail-section">
+      <div class="detail-label">State</div>
+      <div class="detail-value">${state}</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">Vitals</div>
+      <div class="detail-value">Health: ${health} | Armour: ${armour}</div>
+    </div>
+    <div class="detail-section">
       <div class="detail-label">Position</div>
-      <div class="detail-value">x: ${coords.x !== undefined ? coords.x.toFixed(2) : "--"} ? y: ${coords.y !== undefined ? coords.y.toFixed(2) : "--"} ? z: ${coords.z !== undefined ? coords.z.toFixed(2) : "--"}</div>
+      <div class="detail-value">x: ${coords.x !== undefined ? coords.x.toFixed(2) : "--"} | y: ${coords.y !== undefined ? coords.y.toFixed(2) : "--"} | z: ${coords.z !== undefined ? coords.z.toFixed(2) : "--"}</div>
     </div>
     <div class="detail-section">
       <div class="detail-label">Licenses / HWIDs</div>
@@ -152,7 +163,6 @@ window.addEventListener("message", (event) => {
   }
   if (data.type === "players") {
     players = Array.isArray(data.players) ? data.players : [];
-    // ensure lowest id first client-side too
     players.sort((a, b) => (a.id || 0) - (b.id || 0));
     renderPlayers();
   }

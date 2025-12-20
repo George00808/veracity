@@ -63,6 +63,13 @@ local function requestAccess()
   TriggerServerEvent('veracity:requestAccess')
 end
 
+local function requestPlayers()
+  if not sessionToken or not uiOpen then
+    return
+  end
+  TriggerServerEvent('veracity:getPlayers', sessionToken)
+end
+
 local function toggleUI()
   if uiOpen then
     setUI(false)
@@ -86,19 +93,15 @@ RegisterNUICallback('close', function(_, cb)
 end)
 
 RegisterNUICallback('requestPlayers', function(_, cb)
-  if not sessionToken then
-    cb('denied')
-    return
-  end
-  TriggerServerEvent('veracity:getPlayers', sessionToken)
+  requestPlayers()
   cb('ok')
 end)
 
 CreateThread(function()
   while true do
-    local waitTime = 500
+    local waitTime = uiOpen and 1000 or 500
     if uiOpen then
-      waitTime = 0
+      requestPlayers()
       DisableControlAction(0, 1, true)
       DisableControlAction(0, 2, true)
       DisableControlAction(0, 24, true)

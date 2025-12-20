@@ -58,6 +58,32 @@ local function getPlayerCoords(id)
   return { x = coords.x, y = coords.y, z = coords.z }
 end
 
+local function getPlayerState(id)
+  local ped = GetPlayerPed(id)
+  if not ped or ped == 0 then
+    return "unknown"
+  end
+
+  if IsPedFatallyInjured(ped) or IsPedDeadOrDying(ped, true) then
+    return "dead"
+  end
+
+  if IsPedSwimming(ped) or IsPedSwimmingUnderWater(ped) then
+    return "swimming"
+  end
+
+  if IsPedInAnyVehicle(ped, false) then
+    return "driving"
+  end
+
+  local speed = GetEntitySpeed(ped) or 0.0
+  if speed > 1.5 then
+    return "walking"
+  end
+
+  return "idle"
+end
+
 local function collectPlayers(viewerId)
   local viewerCoords = getPlayerCoords(viewerId)
   local players = {}
@@ -67,12 +93,19 @@ local function collectPlayers(viewerId)
     if numericId then
       local coords = getPlayerCoords(numericId)
       local distance = vecDistance(viewerCoords, coords)
+      local ped = GetPlayerPed(numericId)
+      local health = ped and GetEntityHealth(ped) or 0
+      local armour = ped and GetPedArmour(ped) or 0
+
       table.insert(players, {
         id = numericId,
         name = GetPlayerName(pid) or ("ID " .. pid),
         coords = coords,
         distance = distance,
-        identifiers = GetPlayerIdentifiers(pid)
+        identifiers = GetPlayerIdentifiers(pid),
+        state = getPlayerState(numericId),
+        health = health,
+        armour = armour
       })
     end
   end
