@@ -25,6 +25,14 @@ end
 local allowedLookup = buildLookup(Config and Config.AllowedDiscordIds)
 local pendingTokens = {}
 
+local function vecDistance(a, b)
+  if not a or not b then
+    return nil
+  end
+  local dx, dy, dz = a.x - b.x, a.y - b.y, a.z - b.z
+  return math.sqrt(dx * dx + dy * dy + dz * dz)
+end
+
 local function isAuthorized(playerId)
   for _, identifier in ipairs(GetPlayerIdentifiers(playerId)) do
     if allowedLookup[string.lower(identifier)] then
@@ -36,6 +44,44 @@ end
 
 local function generateToken()
   return string.format("%08x%08x%08x", math.random(0, 0xffffffff), math.random(0, 0xffffffff), math.random(0, 0xffffffff))
+end
+
+local function getPlayerCoords(id)
+  local ped = GetPlayerPed(id)
+  if not ped or ped == 0 then
+    return nil
+  end
+  local coords = GetEntityCoords(ped)
+  if not coords then
+    return nil
+  end
+  return { x = coords.x, y = coords.y, z = coords.z }
+end
+
+local function collectPlayers(viewerId)
+  local viewerCoords = getPlayerCoords(viewerId)
+  local players = {}
+
+  for _, pid in ipairs(GetPlayers()) do
+    local numericId = tonumber(pid)
+    if numericId then
+      local coords = getPlayerCoords(numericId)
+      local distance = vecDistance(viewerCoords, coords)
+      table.insert(players, {
+        id = numericId,
+        name = GetPlayerName(pid) or ("ID " .. pid),
+        coords = coords,
+        distance = distance,
+        identifiers = GetPlayerIdentifiers(pid)
+      })
+    end
+  end
+
+  table.sort(players, function(a, b)
+    return a.id < b.id
+  end)
+
+  return players
 end
 
 RegisterNetEvent("veracity:requestAccess", function()
@@ -63,6 +109,20 @@ RegisterNetEvent("veracity:requestAccess", function()
   -- Client will only open when the token it stored matches this open event.
   TriggerClientEvent("veracity:authResult", src, true, "", token)
   TriggerClientEvent("veracity:open", src, token)
+end)
+
+RegisterNetEvent("veracity:getPlayers", function(clientToken)
+  local src = source
+  if not src or type(clientToken) ~= "string" then
+    return
+  end
+
+  if pendingTokens[src] ~= clientToken then
+    return
+  end
+
+  local players = collectPlayers(src)
+  TriggerClientEvent("veracity:playerList", src, players)
 end)
 
 AddEventHandler("playerDropped", function()

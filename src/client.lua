@@ -1,6 +1,6 @@
 local uiOpen = false
 local authPending = false
-local expectedToken = nil
+local sessionToken = nil
 
 local function setUI(state)
   uiOpen = state
@@ -22,27 +22,36 @@ RegisterNetEvent('veracity:authResult', function(allowed, reason, token)
   authPending = false
 
   if not allowed then
-    expectedToken = nil
+    sessionToken = nil
     notifyDenied(reason)
     return
   end
 
   if type(token) ~= "string" or #token == 0 then
-    expectedToken = nil
+    sessionToken = nil
     notifyDenied("Invalid auth token.")
     return
   end
 
-  expectedToken = token
+  sessionToken = token
 end)
 
 RegisterNetEvent('veracity:open', function(token)
-  if not expectedToken or token ~= expectedToken then
+  if not sessionToken or token ~= sessionToken then
     return -- ignore spoofed or stale attempts
   end
 
-  expectedToken = nil
   setUI(true)
+end)
+
+RegisterNetEvent('veracity:playerList', function(list)
+  if not sessionToken then
+    return
+  end
+  SendNUIMessage({
+    type = "players",
+    players = list or {}
+  })
 end)
 
 local function requestAccess()
@@ -73,6 +82,15 @@ end, false)
 
 RegisterNUICallback('close', function(_, cb)
   setUI(false)
+  cb('ok')
+end)
+
+RegisterNUICallback('requestPlayers', function(_, cb)
+  if not sessionToken then
+    cb('denied')
+    return
+  end
+  TriggerServerEvent('veracity:getPlayers', sessionToken)
   cb('ok')
 end)
 

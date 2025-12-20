@@ -375,3 +375,27 @@ body{
 
 .empty-title{font-weight:900; letter-spacing:.2px; color: var(--text);} 
 .empty-sub{margin-top: 6px; font-size: 12px; color: var(--muted-2);} 
+
+
+.players-grid{display:grid;grid-template-columns: 320px 1fr; gap:14px; min-height:320px;}
+.player-list-wrapper{display:flex; flex-direction:column; gap:8px;}
+.player-list-head{font-weight:900; letter-spacing:.2px; color: var(--text);}
+.player-list{border: 1px solid rgba(255,255,255,.05); border-radius: 14px; background: rgba(255,255,255,.02); overflow:hidden; max-height: 360px; padding:4px; display:grid; gap:6px;}
+.player-row{width:100%; border:1px solid rgba(255,255,255,.04); background: rgba(255,255,255,.02); border-radius: 12px; padding: 10px 12px; display:flex; align-items:center; justify-content:space-between; gap:10px; color: var(--text); cursor:pointer; transition: border-color .12s ease, background-color .12s ease; text-align:left;}
+.player-row:hover{border-color: rgba(61,168,255,.5); background: rgba(61,168,255,.08);}
+.player-row.active{border-color: rgba(61,168,255,.8); background: rgba(61,168,255,.12);}
+.player-row-main{display:flex; flex-direction:column; gap:3px;}
+.player-name{font-weight:900; letter-spacing:.2px;}
+.player-sub{color: var(--muted-2); font-size:12px;}
+.player-distance{font-weight:800; color: var(--muted); font-size:12px;}
+.list-empty{text-align:center; padding: 12px; color: var(--muted);} 
+
+.player-detail{border:1px solid rgba(255,255,255,.05); border-radius:14px; padding:14px; background: linear-gradient(145deg, rgba(10,14,28,.84), rgba(6,8,16,.82)); min-height:320px;}
+.detail-head{display:flex; align-items:center; justify-content:space-between; gap:10px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,.05);}
+.detail-name{font-size:18px; font-weight:900; letter-spacing:.2px;}
+.detail-sub{color: var(--muted-2); font-size:12px; margin-top:4px;}
+.detail-section{margin-top:12px;}
+.detail-label{color: var(--muted); font-weight:800; font-size:12px; margin-bottom:4px;}
+.detail-value{font-weight:800; color: var(--text);}
+.identifier-list{margin:0; padding-left:16px; display:grid; gap:6px; color: var(--text);}
+.identifier-list li{font-size:12px; word-break:break-all; color: var(--muted);} 
