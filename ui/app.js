@@ -63,7 +63,7 @@ function renderPlayers() {
 
   if (!players.length) {
     playersListEl.innerHTML = '<div class="list-empty">No players online</div>';
-    playerDetailEl.innerHTML = '<div class="empty"><div class="empty-title">Select a player</div><div class="empty-sub">Click a row to inspect identifiers</div></div>';
+    playerDetailEl.innerHTML = '';
     selectedId = null;
     return;
   }
@@ -94,7 +94,7 @@ function renderDetail() {
   if (!playerDetailEl) return;
   const target = players.find(p => p.id === selectedId);
   if (!target) {
-    playerDetailEl.innerHTML = '<div class="empty"><div class="empty-title">Select a player</div><div class="empty-sub">Click a row to inspect identifiers</div></div>';
+    playerDetailEl.innerHTML = '';
     return;
   }
 
@@ -104,6 +104,7 @@ function renderDetail() {
   const state = target.state || "unknown";
   const health = target.health !== undefined ? target.health : "--";
   const armour = target.armour !== undefined ? target.armour : "--";
+  const fmt = (v) => typeof v === "number" ? v.toFixed(2) : "--";
 
   playerDetailEl.innerHTML = `
     <div class="detail-head">
@@ -122,7 +123,7 @@ function renderDetail() {
     </div>
     <div class="detail-section">
       <div class="detail-label">Position</div>
-      <div class="detail-value">x: ${coords.x !== undefined ? coords.x.toFixed(2) : "--"} | y: ${coords.y !== undefined ? coords.y.toFixed(2) : "--"} | z: ${coords.z !== undefined ? coords.z.toFixed(2) : "--"}</div>
+      <div class="detail-value">x: ${fmt(coords.x)} | y: ${fmt(coords.y)} | z: ${fmt(coords.z)}</div>
     </div>
     <div class="detail-section">
       <div class="detail-label">Licenses / HWIDs</div>
@@ -164,6 +165,9 @@ window.addEventListener("message", (event) => {
   if (data.type === "players") {
     players = Array.isArray(data.players) ? data.players : [];
     players.sort((a, b) => (a.id || 0) - (b.id || 0));
+    if (selectedId && !players.find(p => p.id === selectedId)) {
+      selectedId = null;
+    }
     renderPlayers();
   }
 });
