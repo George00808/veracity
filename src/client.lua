@@ -1,4 +1,5 @@
 local uiOpen = false
+local authPending = false
 
 local function setUI(state)
   uiOpen = state
@@ -11,16 +12,49 @@ local function setUI(state)
   })
 end
 
-RegisterCommand("veracity", function()
-  setUI(not uiOpen)
-end, false)
-RegisterCommand("vrc", function()
-  setUI(not uiOpen)
+local function notifyDenied(reason)
+  local message = reason or "Access denied."
+  TriggerEvent('chat:addMessage', { args = { '^1Veracity', message } })
+end
+
+RegisterNetEvent('veracity:authResult', function(allowed, reason)
+  authPending = false
+  if allowed then
+    setUI(true)
+  else
+    notifyDenied(reason)
+  end
+end)
+
+local function requestAccess()
+  if authPending then
+    return
+  end
+
+  authPending = true
+  TriggerServerEvent('veracity:requestAccess')
+end
+
+local function toggleUI()
+  if uiOpen then
+    setUI(false)
+    return
+  end
+
+  requestAccess()
+end
+
+RegisterCommand('veracity', function()
+  toggleUI()
 end, false)
 
-RegisterNUICallback("close", function(_, cb)
+RegisterCommand('vrc', function()
+  toggleUI()
+end, false)
+
+RegisterNUICallback('close', function(_, cb)
   setUI(false)
-  cb("ok")
+  cb('ok')
 end)
 
 CreateThread(function()

@@ -22,18 +22,33 @@
 
         <nav class="nav" aria-label="Primary">
           <button class="nav-item active" data-tab="dashboard">
-            <span class="nav-ico">◆</span>
+            <span class="nav-ico">DB</span>
             <span class="nav-text">Dashboard</span>
           </button>
 
+          <button class="nav-item" data-tab="admin">
+            <span class="nav-ico">AD</span>
+            <span class="nav-text">Admin</span>
+          </button>
+
           <button class="nav-item" data-tab="players">
-            <span class="nav-ico">◈</span>
+            <span class="nav-ico">PL</span>
             <span class="nav-text">Players</span>
           </button>
 
-          <button class="nav-item" data-tab="empty">
-            <span class="nav-ico">≡</span>
-            <span class="nav-text">Overview</span>
+          <button class="nav-item" data-tab="config">
+            <span class="nav-ico">CF</span>
+            <span class="nav-text">Config</span>
+          </button>
+
+          <button class="nav-item" data-tab="logs">
+            <span class="nav-ico">LG</span>
+            <span class="nav-text">Logs</span>
+          </button>
+
+          <button class="nav-item" data-tab="settings">
+            <span class="nav-ico">ST</span>
+            <span class="nav-text">Settings</span>
           </button>
         </nav>
 
@@ -49,7 +64,7 @@
         <header class="topbar">
           <div class="topbar-left">
             <div class="page-title" id="pageTitle">Dashboard</div>
-            <div class="page-sub">Live overview for Veracity control</div>
+            <div class="page-sub">Select a tab to begin</div>
           </div>
 
           <div class="topbar-right">
@@ -64,118 +79,55 @@
           <div class="grid">
             <div class="card tab" data-tabpanel="dashboard">
               <div class="card-head">
-                <div class="card-title">Activity</div>
-                <div class="card-sub">Realtime state summary</div>
+                <div class="card-title">Dashboard</div>
               </div>
               <div class="card-body">
-                <div class="pill-row">
-                  <div class="pill soft">
-                    <span class="pill-dot"></span>
-                    <span class="pill-text">System stable</span>
-                  </div>
-                  <div class="pill soft">
-                    <span class="pill-dot green"></span>
-                    <span class="pill-text">Sessions</span>
-                    <span class="pill-count">12</span>
-                  </div>
-                  <div class="pill soft">
-                    <span class="pill-dot amber"></span>
-                    <span class="pill-text">Alerts</span>
-                    <span class="pill-count">0</span>
-                  </div>
-                </div>
-                <div class="stat-grid">
-                  <div class="stat">
-                    <div class="stat-label">Uptime</div>
-                    <div class="stat-value">99.98%</div>
-                    <div class="stat-trend positive">+0.2% vs last session</div>
-                  </div>
-                  <div class="stat">
-                    <div class="stat-label">Avg latency</div>
-                    <div class="stat-value">21 ms</div>
-                    <div class="stat-trend neutral">Network nominal</div>
-                  </div>
-                  <div class="stat">
-                    <div class="stat-label">Memory</div>
-                    <div class="stat-value">42%</div>
-                    <div class="stat-trend positive">Stable</div>
-                  </div>
-                </div>
+                <div class="empty"></div>
+              </div>
+            </div>
 
-                <div class="panel">
-                  <div class="panel-title">Recent</div>
-                  <div class="panel-sub">Live cues from the last minute</div>
-                  <div class="timeline">
-                    <div class="timeline-item">
-                      <span class="pill-dot green tiny"></span>
-                      <div>
-                        <div class="timeline-text">Session pool healthy</div>
-                        <div class="timeline-sub">No dropouts detected</div>
-                      </div>
-                    </div>
-                    <div class="timeline-item">
-                      <span class="pill-dot amber tiny"></span>
-                      <div>
-                        <div class="timeline-text">New resource queued</div>
-                        <div class="timeline-sub">Awaiting validation</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div class="card tab hidden" data-tabpanel="admin">
+              <div class="card-head">
+                <div class="card-title">Admin</div>
+              </div>
+              <div class="card-body">
+                <div class="empty"></div>
               </div>
             </div>
 
             <div class="card tab hidden" data-tabpanel="players">
               <div class="card-head">
                 <div class="card-title">Players</div>
-                <div class="card-sub">Roster snapshots</div>
               </div>
               <div class="card-body">
-                <ul class="list">
-                  <li class="list-item">
-                    <div>
-                      <div class="list-title">Alpha</div>
-                      <div class="list-sub">ID #102 · Stable connection</div>
-                    </div>
-                    <div class="badge">
-                      <span class="pill-dot green tiny"></span>
-                      <span>Connected</span>
-                    </div>
-                  </li>
-                  <li class="list-item">
-                    <div>
-                      <div class="list-title">Nova</div>
-                      <div class="list-sub">ID #241 · Monitoring ping</div>
-                    </div>
-                    <div class="badge soft">
-                      <span class="pill-dot amber tiny"></span>
-                      <span>Watching</span>
-                    </div>
-                  </li>
-                  <li class="list-item">
-                    <div>
-                      <div class="list-title">Sentinel</div>
-                      <div class="list-sub">ID #332 · Standing by</div>
-                    </div>
-                    <div class="badge soft">
-                      <span class="pill-dot tiny"></span>
-                      <span>Idle</span>
-                    </div>
-                  </li>
-                </ul>
+                <div class="empty"></div>
               </div>
             </div>
 
-            <div class="card tab hidden" data-tabpanel="empty">
+            <div class="card tab hidden" data-tabpanel="config">
               <div class="card-head">
-                <div class="card-title">Overview</div>
-                <div class="card-sub">Customize what you need next</div>
+                <div class="card-title">Config</div>
               </div>
               <div class="card-body">
-                <div class="empty">
-                  <div class="empty-title">Coming soon</div>
-                  <div class="empty-sub">Future widgets will live here</div>
-                </div>
+                <div class="empty"></div>
+              </div>
+            </div>
+
+            <div class="card tab hidden" data-tabpanel="logs">
+              <div class="card-head">
+                <div class="card-title">Logs</div>
+              </div>
+              <div class="card-body">
+                <div class="empty"></div>
+              </div>
+            </div>
+
+            <div class="card tab hidden" data-tabpanel="settings">
+              <div class="card-head">
+                <div class="card-title">Settings</div>
+              </div>
+              <div class="card-body">
+                <div class="empty"></div>
               </div>
             </div>
 

@@ -10,6 +10,10 @@ files {
   'ui/app.js'
 }
 
+shared_scripts {
+  'src/config.lua'
+}
+
 client_scripts {
   'src/client.lua'
 }

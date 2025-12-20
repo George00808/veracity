@@ -4,8 +4,11 @@ const tabs = Array.from(document.querySelectorAll(".tab"));
 const pageTitle = document.getElementById("pageTitle");
 const titleMap = {
   dashboard: "Dashboard",
+  admin: "Admin",
   players: "Players",
-  empty: "Overview"
+  config: "Config",
+  logs: "Logs",
+  settings: "Settings"
 };
 const defaultTab = "dashboard";
 
