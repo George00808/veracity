@@ -5,7 +5,7 @@ const pageTitle = document.getElementById("pageTitle");
 const titleMap = {
   dashboard: "Dashboard",
   players: "Players",
-  empty: " "
+  empty: "Overview"
 };
 const defaultTab = "dashboard";
 

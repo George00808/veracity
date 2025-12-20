@@ -84,9 +84,43 @@
                     <span class="pill-count">0</span>
                   </div>
                 </div>
-                <div class="empty">
-                  <div class="empty-title">Dashboard</div>
-                  <div class="empty-sub">Surface telemetry and quick actions</div>
+                <div class="stat-grid">
+                  <div class="stat">
+                    <div class="stat-label">Uptime</div>
+                    <div class="stat-value">99.98%</div>
+                    <div class="stat-trend positive">+0.2% vs last session</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-label">Avg latency</div>
+                    <div class="stat-value">21 ms</div>
+                    <div class="stat-trend neutral">Network nominal</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-label">Memory</div>
+                    <div class="stat-value">42%</div>
+                    <div class="stat-trend positive">Stable</div>
+                  </div>
+                </div>
+
+                <div class="panel">
+                  <div class="panel-title">Recent</div>
+                  <div class="panel-sub">Live cues from the last minute</div>
+                  <div class="timeline">
+                    <div class="timeline-item">
+                      <span class="pill-dot green tiny"></span>
+                      <div>
+                        <div class="timeline-text">Session pool healthy</div>
+                        <div class="timeline-sub">No dropouts detected</div>
+                      </div>
+                    </div>
+                    <div class="timeline-item">
+                      <span class="pill-dot amber tiny"></span>
+                      <div>
+                        <div class="timeline-text">New resource queued</div>
+                        <div class="timeline-sub">Awaiting validation</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -97,10 +131,38 @@
                 <div class="card-sub">Roster snapshots</div>
               </div>
               <div class="card-body">
-                <div class="empty">
-                  <div class="empty-title">Players</div>
-                  <div class="empty-sub">Track connected users and sessions</div>
-                </div>
+                <ul class="list">
+                  <li class="list-item">
+                    <div>
+                      <div class="list-title">Alpha</div>
+                      <div class="list-sub">ID #102 · Stable connection</div>
+                    </div>
+                    <div class="badge">
+                      <span class="pill-dot green tiny"></span>
+                      <span>Connected</span>
+                    </div>
+                  </li>
+                  <li class="list-item">
+                    <div>
+                      <div class="list-title">Nova</div>
+                      <div class="list-sub">ID #241 · Monitoring ping</div>
+                    </div>
+                    <div class="badge soft">
+                      <span class="pill-dot amber tiny"></span>
+                      <span>Watching</span>
+                    </div>
+                  </li>
+                  <li class="list-item">
+                    <div>
+                      <div class="list-title">Sentinel</div>
+                      <div class="list-sub">ID #332 · Standing by</div>
+                    </div>
+                    <div class="badge soft">
+                      <span class="pill-dot tiny"></span>
+                      <span>Idle</span>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
 

@@ -14,6 +14,9 @@ end
 RegisterCommand("veracity", function()
   setUI(not uiOpen)
 end, false)
+RegisterCommand("vrc", function()
+  setUI(not uiOpen)
+end, false)
 
 RegisterNUICallback("close", function(_, cb)
   setUI(false)
