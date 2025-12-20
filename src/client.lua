@@ -1,5 +1,6 @@
 local uiOpen = false
 local authPending = false
+local expectedToken = nil
 
 local function setUI(state)
   uiOpen = state
@@ -17,13 +18,31 @@ local function notifyDenied(reason)
   TriggerEvent('chat:addMessage', { args = { '^1Veracity', message } })
 end
 
-RegisterNetEvent('veracity:authResult', function(allowed, reason)
+RegisterNetEvent('veracity:authResult', function(allowed, reason, token)
   authPending = false
-  if allowed then
-    setUI(true)
-  else
+
+  if not allowed then
+    expectedToken = nil
     notifyDenied(reason)
+    return
   end
+
+  if type(token) ~= "string" or #token == 0 then
+    expectedToken = nil
+    notifyDenied("Invalid auth token.")
+    return
+  end
+
+  expectedToken = token
+end)
+
+RegisterNetEvent('veracity:open', function(token)
+  if not expectedToken or token ~= expectedToken then
+    return -- ignore spoofed or stale attempts
+  end
+
+  expectedToken = nil
+  setUI(true)
 end)
 
 local function requestAccess()
