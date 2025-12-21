@@ -98,24 +98,18 @@ RegisterNUICallback('requestPlayers', function(_, cb)
 end)
 
 CreateThread(function()
+  local nextSync = 0
   while true do
-    local waitTime = uiOpen and 1000 or 500
+    local now = GetGameTimer()
+    local waitTime = uiOpen and 0 or 500
     if uiOpen then
-      requestPlayers()
-      DisableControlAction(0, 1, true)
-      DisableControlAction(0, 2, true)
-      DisableControlAction(0, 30, true)
-      DisableControlAction(0, 31, true)
-      DisableControlAction(0, 32, true)
-      DisableControlAction(0, 33, true)
-      DisableControlAction(0, 34, true)
-      DisableControlAction(0, 35, true)
-      DisableControlAction(0, 21, true)
-      DisableControlAction(0, 22, true)
-      DisableControlAction(0, 44, true)
-      DisableControlAction(0, 24, true)
-      DisableControlAction(0, 25, true)
-      DisableControlAction(0, 177, true)
+      if now >= nextSync then
+        requestPlayers()
+        nextSync = now + 1000
+      end
+      DisableAllControlActions(0)
+      EnableControlAction(0, 177, true) -- back
+      EnableControlAction(0, 200, true) -- pause/menu
       if IsDisabledControlJustReleased(0, 177) then
         setUI(false)
       end

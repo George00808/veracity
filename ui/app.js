@@ -118,40 +118,90 @@ function renderDetail() {
 
   const coords = target.coords || {};
   const distance = typeof target.distance === "number" ? `${Math.floor(target.distance)} m away` : "Distance unavailable";
-  const identifiers = (target.identifiers || []).map(id => `<li>${id}</li>`).join("") || "<li>No identifiers</li>";
+  const identifiers = formatIdentifiers(target.identifiers || []);
   const state = target.state || "unknown";
   const health = target.health !== undefined ? target.health : "--";
   const armour = target.armour !== undefined ? target.armour : "--";
   const fmt = (v) => typeof v === "number" ? v.toFixed(2) : "--";
 
   playerDetailEl.innerHTML = `
-    <div class="detail-head">
-      <div>
-        <div class="detail-name">${target.name || "Unknown"}</div>
-        <div class="detail-sub">ID ${target.id} | ${distance}</div>
+    <div class="detail-hero">
+      <div class="detail-name">${target.name || "Unknown"}</div>
+      <div class="detail-sub">ID ${target.id} | ${distance}</div>
+      <div class="pill soft mt-8">
+        <span class="pill-dot"></span>
+        <span class="pill-text">State: ${state}</span>
       </div>
     </div>
-    <div class="detail-section">
-      <div class="detail-label">State</div>
-      <div class="detail-value">${state}</div>
+
+    <div class="detail-grid">
+      <div class="panel">
+        <div class="panel-title">Health</div>
+        <div class="panel-body">Health: ${health} | Armour: ${armour}</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Position</div>
+        <div class="panel-body">x: ${fmt(coords.x)} | y: ${fmt(coords.y)} | z: ${fmt(coords.z)}</div>
+      </div>
     </div>
-    <div class="detail-section">
-      <div class="detail-label">Vitals</div>
-      <div class="detail-value">Health: ${health} | Armour: ${armour}</div>
+
+    <div class="map-card">
+      <div class="map-head">
+        <div class="map-title">Map</div>
+        <div class="map-sub">Approximate location</div>
+      </div>
+      <div class="map-body">
+        <div class="map-placeholder">
+          <div class="map-pin" style="left:${mapToPercent(coords).x}%; top:${mapToPercent(coords).y}%;"></div>
+        </div>
+        <div class="map-coords">x: ${fmt(coords.x)} | y: ${fmt(coords.y)} | z: ${fmt(coords.z)}</div>
+      </div>
     </div>
-    <div class="detail-section">
-      <div class="detail-label">Position</div>
-      <div class="detail-value">x: ${fmt(coords.x)} | y: ${fmt(coords.y)} | z: ${fmt(coords.z)}</div>
-    </div>
+
     <div class="detail-section">
       <div class="detail-label">Licenses / HWIDs</div>
-      <ul class="identifier-list">${identifiers}</ul>
+      <div class="license-grid">
+        ${identifiers}
+      </div>
     </div>
   `;
 }
 
 function requestPlayers() {
   nuiPost("requestPlayers");
+}
+
+function mapToPercent(coords) {
+  const bounds = { minX: -4200, maxX: 4200, minY: -4200, maxY: 4200 };
+  const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+  const x = typeof coords.x === "number" ? clamp(coords.x, bounds.minX, bounds.maxX) : 0;
+  const y = typeof coords.y === "number" ? clamp(coords.y, bounds.minY, bounds.maxY) : 0;
+  const xPct = ((x - bounds.minX) / (bounds.maxX - bounds.minX)) * 100;
+  const yPct = 100 - (((y - bounds.minY) / (bounds.maxY - bounds.minY)) * 100);
+  return { x: xPct, y: yPct };
+}
+
+function formatIdentifiers(ids) {
+  if (!Array.isArray(ids) || !ids.length) return "<div class=\"license-card\">No identifiers</div>";
+
+  const labelFor = (val) => {
+    if (val.startsWith("discord:")) return "Discord";
+    if (val.startsWith("steam:")) return "Steam";
+    if (val.startsWith("license:")) return "License";
+    if (val.startsWith("license2:")) return "License 2";
+    if (val.startsWith("fivem:")) return "FiveM";
+    if (val.startsWith("ip:")) return "IP";
+    if (val.startsWith("xbl:")) return "Xbox";
+    if (val.startsWith("live:")) return "Live";
+    if (val.startsWith("hwid:")) return "HWID";
+    return "ID";
+  };
+
+  return ids.map(id => {
+    const label = labelFor(id);
+    return `<div class="license-card"><div class="license-label">${label}</div><div class="license-value">${id}</div></div>`;
+  }).join("");
 }
 
 navItems.forEach(btn => {
