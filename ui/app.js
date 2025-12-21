@@ -4,6 +4,8 @@ const tabs = Array.from(document.querySelectorAll(".tab"));
 const pageTitle = document.getElementById("pageTitle");
 const playersListEl = document.getElementById("playersList");
 const playerDetailEl = document.getElementById("playerDetail");
+const detailTitleEl = document.getElementById("detailTitle");
+const backToPlayersBtn = document.getElementById("backToPlayers");
 
 let players = [];
 let selectedId = null;
@@ -14,7 +16,8 @@ const titleMap = {
   players: "Players",
   config: "Config",
   logs: "Logs",
-  settings: "Settings"
+  settings: "Settings",
+  "player-detail": "Player"
 };
 const defaultTab = "dashboard";
 
@@ -57,20 +60,39 @@ function setTab(tabName) {
   }
 }
 
+function openPlayerDetail(playerId) {
+  selectedId = playerId;
+  renderDetail();
+  // keep nav highlighting on players while showing detail
+  tabs.forEach(panel => {
+    const isDetail = panel.dataset.tabpanel === "player-detail";
+    const isPlayers = panel.dataset.tabpanel === "players";
+    panel.classList.toggle("hidden", !(isDetail || false));
+  });
+  document.querySelector('[data-tabpanel="players"]').classList.add('hidden');
+  document.querySelector('[data-tabpanel="player-detail"]').classList.remove('hidden');
+  pageTitle.textContent = "Player";
+}
+
+function backToPlayers() {
+  document.querySelector('[data-tabpanel="player-detail"]').classList.add('hidden');
+  document.querySelector('[data-tabpanel="players"]').classList.remove('hidden');
+  setTab('players');
+}
+
 function renderPlayers() {
   if (!playersListEl) return;
   playersListEl.innerHTML = "";
 
   if (!players.length) {
     playersListEl.innerHTML = '<div class="list-empty">No players online</div>';
-    playerDetailEl.innerHTML = '';
     selectedId = null;
     return;
   }
 
   players.forEach(p => {
     const row = document.createElement("button");
-    row.className = "player-row" + (p.id === selectedId ? " active" : "");
+    row.className = "player-row";
     row.dataset.playerId = p.id;
     const distance = typeof p.distance === "number" ? `${Math.floor(p.distance)} m` : "--";
     row.innerHTML = `
@@ -82,12 +104,6 @@ function renderPlayers() {
     `;
     playersListEl.appendChild(row);
   });
-
-  if (selectedId === null && players.length) {
-    selectedId = players[0].id;
-  }
-
-  renderDetail();
 }
 
 function renderDetail() {
@@ -97,6 +113,8 @@ function renderDetail() {
     playerDetailEl.innerHTML = '';
     return;
   }
+
+  detailTitleEl.textContent = target.name || `ID ${target.id}`;
 
   const coords = target.coords || {};
   const distance = typeof target.distance === "number" ? `${Math.floor(target.distance)} m away` : "Distance unavailable";
@@ -144,9 +162,13 @@ if (playersListEl) {
   playersListEl.addEventListener("click", (e) => {
     const row = e.target.closest(".player-row");
     if (!row) return;
-    selectedId = Number(row.dataset.playerId);
-    renderPlayers();
+    const pid = Number(row.dataset.playerId);
+    openPlayerDetail(pid);
   });
+}
+
+if (backToPlayersBtn) {
+  backToPlayersBtn.addEventListener('click', backToPlayers);
 }
 
 window.addEventListener("keydown", (e) => {
@@ -165,10 +187,10 @@ window.addEventListener("message", (event) => {
   if (data.type === "players") {
     players = Array.isArray(data.players) ? data.players : [];
     players.sort((a, b) => (a.id || 0) - (b.id || 0));
-    if (selectedId && !players.find(p => p.id === selectedId)) {
-      selectedId = null;
-    }
     renderPlayers();
+    if (selectedId) {
+      renderDetail();
+    }
   }
 });
 
